@@ -10,6 +10,7 @@ I recommand to use their repo to install the command-line tool. Especially, if y
 https://github.com/touist/touist
 
 Once installed, you can just run the application.
+You will need this to be runned when the epistemic-reasonner is running so he can calls this service.
 
 ## Setting up the application
 ### 1. Clone the repository
