@@ -23,7 +23,7 @@ cd touist-service
 
 ### 2. Install dependencies
 ```
-pip install
+pip install Flask flask_cors
 ```
 
 ### 3. Starting the application
