@@ -14,26 +14,55 @@ if not os.path.exists(CACHE_DIR):
 
 def run_touist_command(args, stdin_data):
     try:
+        # Charger l'environnement OPAM
+        opam_env = subprocess.check_output(['opam', 'env', '--shell', 'bash'], universal_newlines=True)
+        env = os.environ.copy()
+        for line in opam_env.splitlines():
+            if line.startswith('export'):
+                var, value = line.split()[1].split('=')
+                env[var] = value.strip('"')
+
         with tempfile.NamedTemporaryFile(delete=False, mode='w', dir=CACHE_DIR) as temp_file:
             temp_file.write(stdin_data)
             temp_file_path = temp_file.name
-        # Créer une commande avec les arguments
+
         command = f"touist {args} {temp_file_path}"
-        process = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(f"Running command: {command}")
 
-        # Passer les données d'entrée (stdin) à la commande
-        stdout, stderr = process.communicate(input=stdin_data.encode())  # Utilisation de .encode() pour convertir en bytes
+        process = subprocess.Popen(
+            command,
+            shell=True,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        stdout, stderr = process.communicate()
 
-        # Vérifier s'il y a une erreur
-        if stderr:
-            return f"Error: {stderr.decode()}"
+        stdout_decoded = stdout.decode()
+        stderr_decoded = stderr.decode()
 
-        return stdout.decode()
+        if stderr_decoded.strip():
+            print(f"[WARNING] touist stderr output:\n{stderr_decoded}")
 
+        return stdout_decoded
+
+    except FileNotFoundError:
+        error_message = "Command 'touist' not found. Is it installed and available in PATH?"
+        print(f"[ERROR] {error_message}")
+        raise RuntimeError(error_message)
+    except subprocess.CalledProcessError as e:
+        error_message = f"Subprocess error: {str(e)}"
+        print(f"[ERROR] {error_message}")
+        raise RuntimeError(error_message)
     except Exception as e:
-        return f"Error executing command: {str(e)}"
+        error_message = f"Unexpected error: {str(e)}"
+        print(f"[ERROR] {error_message}")
+        raise RuntimeError(error_message)
 
 
+@app.route('/')
+def hello():
+    return "Bonjour ! Bienvenue sur le serveur Touist"
 
 @app.route('/touist_cmd', methods=['POST'])
 def touist_cmd():
