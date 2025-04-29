@@ -41,7 +41,7 @@ pip install Flask flask_cors
 ```
 eval $(opam env)
 ```
-!!!!!!
+Run the server
 
 ```
 python -m server
