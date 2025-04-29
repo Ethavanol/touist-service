@@ -16,11 +16,11 @@ You will need this to be runned when the epistemic-reasonner is running so he ca
 
 ## Warning for Linux
 
-Installing it with opam, you will probably have to use an environment to use opam and the tools installed on it with the following command :
+Installing it with opam, you will have to use an environment to run the tools installed on opam.
+SO each time you want to use an opam-tool you will have to run the following command :
 ```
 eval $(opam env)
 ```
-So each time you wan't to use Touist, you will have to run this before.
 Saying this, you will have to run this eval command every time before running the python server.
 Otherwise you will have an error.
 
