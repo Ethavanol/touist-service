@@ -37,6 +37,12 @@ pip install Flask flask_cors
 ```
 
 ### 3. Starting the application
+!!!!!!IF ON LINUX and necessary for opam :
+```
+eval $(opam env)
+```
+!!!!!!
+
 ```
 python -m server
 ```
