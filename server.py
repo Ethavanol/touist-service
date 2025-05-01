@@ -6,6 +6,7 @@ import json
 
 app = Flask(__name__)
 CORS(app)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # e.g., 16 MB limit
 
 CACHE_DIR = 'cache_touist'
 
@@ -67,14 +68,16 @@ def hello():
 @app.route('/touist_cmd', methods=['POST'])
 def touist_cmd():
     try:
-        args = request.form.get('args', '')
-        stdin_data = request.form.get('stdin', '')
+        data = request.get_json()
+        args = data.get('args', '')
+        stdin_data = data.get('stdin', '')
         print("args", args)
         print("stdin", stdin_data)
         result = run_touist_command(args, stdin_data)
         return jsonify(result)
 
     except Exception as e:
+        print(f"[ERROR in jsonify] : : {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
