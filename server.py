@@ -71,8 +71,8 @@ def touist_cmd():
         data = request.get_json()
         args = data.get('args', '')
         stdin_data = data.get('stdin', '')
-        print("args", args)
-        print("stdin", stdin_data)
+        print("args : \n", args)
+        print("stdin : \n", stdin_data)
         result = run_touist_command(args, stdin_data)
         return jsonify(result)
 
