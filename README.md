@@ -6,18 +6,18 @@ TouIST is a language for propositional logic and can be used as a SAT-solver : h
 ## Prerequisites
 First of all you need to install the TouIST command-line tool.
 
-I recommand to follow their repo instrutions to install the command-line tool. You might want to install it with opam. As this tool isn't maintained, we can't install it with brew.
+We recommand to follow their repo instrutions to install the command-line tool. You might want to install it with opam. As this tool isn't maintained, we can't install it with brew.
 https://github.com/touist/touist
 
-As I was on Windows, I personnally installed it with OPAM.
+We personnally installed it with OPAM on both Windos and Linux.
 
 Once installed, you can just run the application.
 You will need this to be runned when the epistemic-reasonner is running so he can calls this service.
 
 ## Warning for Linux
 
-Installing it with opam, you will have to use an environment to run the tools installed on opam.
-SO each time you want to use an opam-tool you will have to run the following command :
+Installing it with opam under Linux, you will have to use an environment to run the tools installed on opam.
+So each time you want to use an opam-tool you will have to run the following command :
 ```
 eval $(opam env)
 ```
@@ -41,8 +41,15 @@ pip install Flask flask_cors
 ```
 eval $(opam env)
 ```
+
 Run the server
 
 ```
 python -m server
 ```
+
+### Configurations and Services
+
+A folder cache_touist will be created at execution time.
+It stores the constraints TouIST uses to generate the models/set of worlds.
+In these files you will be able to see those constraints.

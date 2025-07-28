@@ -42,8 +42,9 @@ def run_touist_command(args, stdin_data):
         stdout_decoded = stdout.decode()
         stderr_decoded = stderr.decode()
 
-        if stderr_decoded.strip():
+        if stderr_decoded.strip() and stderr_decoded.strip() != 'unsat':
             print(f"[WARNING] touist stderr output:\n{stderr_decoded}")
+            raise RuntimeError(stderr_decoded.strip())
 
         return stdout_decoded
 
@@ -56,7 +57,7 @@ def run_touist_command(args, stdin_data):
         print(f"[ERROR] {error_message}")
         raise RuntimeError(error_message)
     except Exception as e:
-        error_message = f"Unexpected error: {str(e)}"
+        error_message = str(e)
         print(f"[ERROR] {error_message}")
         raise RuntimeError(error_message)
 
@@ -73,9 +74,12 @@ def touist_cmd():
         stdin_data = data.get('stdin', '')
         print("args : \n", args)
         print("stdin : \n", stdin_data)
-        result = run_touist_command(args, stdin_data)
-        return jsonify(result)
 
+        result = run_touist_command(args, stdin_data)
+        return jsonify({"output": result}), 200
+    
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
         print(f"[ERROR in jsonify] : : {str(e)}")
         return jsonify({"error": str(e)}), 500
